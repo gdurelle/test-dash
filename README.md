@@ -1,24 +1,23 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Sample dashboard UI
 
-Things you may want to cover:
+* Ruby 2.7
+* Rails 6.0.*
 
-* Ruby version
+## Dependencies
 
-* System dependencies
+* postgreSQL
 
 * Configuration
 
-* Database creation
+## Install
 
-* Database initialization
+```gem install```
+```yarn install```
+```rails db:create```
 
-* How to run the test suite
+## DEV
 
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+```rails s```
+```yarn watch```
