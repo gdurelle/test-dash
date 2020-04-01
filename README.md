@@ -16,9 +16,16 @@ Sample dashboard UI
 ```gem install```
 ```yarn install```
 ```rails db:create```
+```
+RUBYOPT='-W:no-deprecated -W:no-experimental' rails db:seed
+```
 
 ## DEV
 
 ```rails s```
 ```yarn watch```
 
+## Work & Timing
+
+* Resuming work
+* Taking a break
