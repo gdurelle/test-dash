@@ -29,3 +29,4 @@ RUBYOPT='-W:no-deprecated -W:no-experimental' rails db:seed
 
 * Resuming work
 * Taking a break
+
