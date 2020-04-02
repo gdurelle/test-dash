@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_01_214602) do
+ActiveRecord::Schema.define(version: 2020_04_02_131206) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,4 +23,15 @@ ActiveRecord::Schema.define(version: 2020_04_01_214602) do
     t.index ["import_id"], name: "index_customers_on_import_id", unique: true
   end
 
+  create_table "orders", force: :cascade do |t|
+    t.bigint "customer_id", null: false
+    t.string "country"
+    t.integer "import_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["customer_id"], name: "index_orders_on_customer_id"
+    t.index ["import_id"], name: "index_orders_on_import_id"
+  end
+
+  add_foreign_key "orders", "customers"
 end
