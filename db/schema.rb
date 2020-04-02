@@ -19,7 +19,8 @@ ActiveRecord::Schema.define(version: 2020_04_01_214602) do
     t.string "country"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "import_id"
+    t.integer "import_id", null: false
+    t.index ["import_id"], name: "index_customers_on_import_id", unique: true
   end
 
 end

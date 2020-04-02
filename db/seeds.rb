@@ -21,6 +21,8 @@ begin
   end
   puts "Customers in CSV: #{customers.size}"
   import_customers = Customer.bulk_import(customers.to_a,
+                                          on_duplicate_key_ignore: true,
+                                          conflict_target: :import_id,
                                           batch_size: customers.size/2,
                                           returning: :import_id
                                           )
