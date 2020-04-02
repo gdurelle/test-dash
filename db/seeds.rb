@@ -12,15 +12,19 @@ entry.extract(csv_file_path)
 puts "File #{csv_file_name} has been extracted."
 
 puts 'starting DB import'
+customers = Set.new
 
 begin
-  customers = Set.new
   CSV.foreach(csv_file_path, headers: true) do |row|
-    customers << {import_id: row['customer_id'], country: row['country'] }
+    customers << Customer.new(import_id: row['customer_id'],
+                              country: row['country'])
   end
   puts "Customers in CSV: #{customers.size}"
-  import_customers = Customer.import(customers)
-  puts "Customers imported: #{import_customers.num_inserts}"
+  import_customers = Customer.bulk_import(customers.to_a,
+                                          batch_size: customers.size/2,
+                                          returning: :import_id
+                                          )
+  puts "Customers imported: #{import_customers.results.size}"
 ensure
   File.delete(csv_file_path)
   puts "CSV file has been delete after treatment."
