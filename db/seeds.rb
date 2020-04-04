@@ -13,6 +13,7 @@ csv_file_name = entry.name
 csv_file_path = File.join('db', csv_file_name)
 entry.extract(csv_file_path)
 puts "File #{csv_file_name} has been extracted."
+puts "---"
 # ####################################
 # ####################################
 
@@ -21,6 +22,7 @@ customers_objects = []
 customers_ids = Set.new
 orders_objects = []
 orders_ids = Set.new
+order_items_objects = []
 begin
   # ####################################
   # ########## CSV read  ###############
@@ -40,29 +42,40 @@ begin
                           )
       orders_ids << row['order_id']
     end
+
+    order_items_objects << OrderItem.new({
+                              order: orders_objects.last,
+                              product_code: row['product_code'],
+                              product_description: row['product_description'],
+                              quantity: row['quantity'],
+                              unit_price: row['unit_price']
+                            }
+                        )
+    if !order_items_objects.last.valid?
+      raise "Invalid OrderItem: #{order_items_objects.last.errors.to_json}"
+    end
   end
   puts "Customers in CSV: #{customers_ids.size}"
   puts "Orders in CSV: #{orders_ids.size}"
+  puts "OrderItems in CSV: #{order_items_objects.size}"
   puts '---'
   # ####################################
   # ######### IMPORT in bulk ###########
   # ####################################
-  puts 'Starting DB import'
-  import_customers = Customer.bulk_import(customers_objects,
-                                          on_duplicate_key_ignore: true,
-                                          conflict_target: :import_id,
-                                          batch_size: customers_objects.size/2,
-                                          returning: :import_id
-                                          )
+  puts("Cleanup DB")
+  OrderItem.delete_all
+  Order.delete_all
+  Customer.delete_all
+
+  puts 'DB import...'
+  import_customers = Customer.bulk_import(customers_objects, returning: :import_id)
   puts "Customers imported: #{import_customers.results.size}"
 
-  import_orders = Order.bulk_import(orders_objects,
-                                          on_duplicate_key_ignore: true,
-                                          conflict_target: :import_id,
-                                          batch_size: orders_objects.size/2,
-                                          returning: :import_id
-                                          )
+  import_orders = Order.bulk_import(orders_objects, returning: :import_id)
   puts "Orders imported: #{import_orders.results.size}"
+
+  import_order_items = OrderItem.bulk_import(order_items_objects, returning: :id)
+  puts "OrderItems imported: #{import_order_items.results.size}"
 
 ensure
   File.delete(csv_file_path)
