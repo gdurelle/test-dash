@@ -23,6 +23,7 @@ customers_ids = Set.new
 orders_objects = []
 orders_ids = Set.new
 order_items_objects = []
+order_total = 0.0
 begin
   # ####################################
   # ########## CSV read  ###############
@@ -42,6 +43,15 @@ begin
                           )
       orders_ids << row['order_id']
     end
+
+    # calculus order_total
+    if row['order_id'].to_i == orders_objects.last.import_id && !order_items_objects.empty?
+      order_total += order_items_objects.last.quantity * order_items_objects.last.unit_price
+    else
+      orders_objects.last.total_amount = order_total
+      order_total = 0.0
+    end
+    # puts "#{row['order_id']}--#{orders_objects.last.total_amount} with #{order_total}"
 
     order_items_objects << OrderItem.new({
                               order: orders_objects.last,

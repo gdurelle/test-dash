@@ -3,6 +3,7 @@
 <h2>
   Country
 </h2>
+<%= select_tag :countries, options_for_select(@countries), prompt: "ALL" %>
 
 <h2>
   Summary
@@ -12,7 +13,9 @@
     <div class="card-body">
       <h3>
         <div>Revenue</div>
-        <div id="revenue"></div>
+        <div id="revenue">
+          <%= @revenue %>
+        </div>
       </h3>
     </div>
   </div>
@@ -20,7 +23,9 @@
     <div class="card-body">
       <h3>
         <div>AVG Revenue/Order</div>
-        <div id="avg-revenue"></div>
+        <div id="avg-revenue">
+          <%= @avg_rev %>
+        </div>
       </h3>
     </div>
   </div>

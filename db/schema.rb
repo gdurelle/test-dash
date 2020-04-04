@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_04_111821) do
+ActiveRecord::Schema.define(version: 2020_04_04_132547) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,6 +41,8 @@ ActiveRecord::Schema.define(version: 2020_04_04_111821) do
     t.integer "import_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "total_amount_cents", default: 0, null: false
+    t.string "total_amount_currency", default: "EUR", null: false
     t.index ["customer_id"], name: "index_orders_on_customer_id"
     t.index ["import_id"], name: "index_orders_on_import_id"
   end
