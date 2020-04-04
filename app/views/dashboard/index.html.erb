@@ -14,7 +14,7 @@
       <h3>
         <div>Revenue</div>
         <div id="revenue">
-          <%= @revenue %>
+          <%= humanized_money_with_symbol @revenue %>
         </div>
       </h3>
     </div>
@@ -24,7 +24,7 @@
       <h3>
         <div>AVG Revenue/Order</div>
         <div id="avg-revenue">
-          <%= @avg_rev %>
+          <%= humanized_money_with_symbol @avg_rev, precision: 2 %>
         </div>
       </h3>
     </div>
@@ -34,7 +34,7 @@
       <h3>
         <div>Customers</div>
         <div id="customers-count">
-          <%= @customers_count %>
+          <%= number_to_human @customers_count, precision: 2, units: { million: 'M', thousand: 'K'} %>
         </div>
       </h3>
     </div>

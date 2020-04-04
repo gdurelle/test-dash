@@ -23,7 +23,7 @@ customers_ids = Set.new
 orders_objects = []
 orders_ids = Set.new
 order_items_objects = []
-order_total = 0.0
+order_totals = {}
 begin
   # ####################################
   # ########## CSV read  ###############
@@ -44,15 +44,6 @@ begin
       orders_ids << row['order_id']
     end
 
-    # calculus order_total
-    if row['order_id'].to_i == orders_objects.last.import_id && !order_items_objects.empty?
-      order_total += order_items_objects.last.quantity * order_items_objects.last.unit_price
-    else
-      orders_objects.last.total_amount = order_total
-      order_total = 0.0
-    end
-    # puts "#{row['order_id']}--#{orders_objects.last.total_amount} with #{order_total}"
-
     order_items_objects << OrderItem.new({
                               order: orders_objects.last,
                               product_code: row['product_code'],
@@ -64,11 +55,23 @@ begin
     if !order_items_objects.last.valid?
       raise "Invalid OrderItem: #{order_items_objects.last.errors.to_json}"
     end
+
+    # calculus order_total
+    if order_totals.has_key?(row['order_id'].to_s)
+        order_totals[row['order_id'].to_s] = (order_totals[row['order_id'].to_s].to_f + (row['quantity'].to_i * row['unit_price'].to_f))
+    else
+      order_totals[row['order_id'].to_s] = (row['quantity'].to_i * row['unit_price'].to_f)
+    end
+
   end
-  puts "Customers in CSV: #{customers_ids.size}"
-  puts "Orders in CSV: #{orders_ids.size}"
-  puts "OrderItems in CSV: #{order_items_objects.size}"
+  puts "CSV Customers: #{customers_ids.size}"
+  puts "CSV Orders: #{orders_ids.size}"
+  puts "CSV OrderItems: #{order_items_objects.size}"
   puts '---'
+
+  orders_objects.each do |order|
+    order.total_amount = order_totals[order.import_id.to_s]
+  end
   # ####################################
   # ######### IMPORT in bulk ###########
   # ####################################
@@ -78,14 +81,14 @@ begin
   Customer.delete_all
 
   puts 'DB import...'
-  import_customers = Customer.bulk_import(customers_objects, returning: :import_id)
-  puts "Customers imported: #{import_customers.results.size}"
+  import_customers = Customer.bulk_import(customers_objects, returning: :id)
+  puts "Imported Customers: #{import_customers.results.size}"
 
-  import_orders = Order.bulk_import(orders_objects, returning: :import_id)
-  puts "Orders imported: #{import_orders.results.size}"
+  import_orders = Order.bulk_import(orders_objects, returning: :id)
+  puts "Imported Orders: #{import_orders.results.size}"
 
   import_order_items = OrderItem.bulk_import(order_items_objects, returning: :id)
-  puts "OrderItems imported: #{import_order_items.results.size}"
+  puts "Imported OrderItems: #{import_order_items.results.size}"
 
 ensure
   File.delete(csv_file_path)
