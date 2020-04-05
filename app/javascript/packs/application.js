@@ -18,5 +18,7 @@ require("channels")
 import 'jquery';
 import 'popper.js';
 import 'bootstrap/dist/js/bootstrap';
+require("chartkick")
+require("chart.js")
 
 import './css/application';
