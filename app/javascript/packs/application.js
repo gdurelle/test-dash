@@ -22,3 +22,5 @@ require("chartkick")
 require("chart.js")
 
 import './css/application';
+
+import './dashboard';
