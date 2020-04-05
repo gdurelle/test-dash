@@ -58,9 +58,9 @@ begin
 
     # calculus order_total
     if order_totals.has_key?(row['order_id'].to_s)
-        order_totals[row['order_id'].to_s] = (order_totals[row['order_id'].to_s].to_f + (row['quantity'].to_i * row['unit_price'].to_f))
+        order_totals[row['order_id'].to_s] = (order_totals[row['order_id'].to_s].to_d + (row['quantity'].to_i * row['unit_price'].to_d))
     else
-      order_totals[row['order_id'].to_s] = (row['quantity'].to_i * row['unit_price'].to_f)
+      order_totals[row['order_id'].to_s] = (row['quantity'].to_i * row['unit_price'].to_d)
     end
 
   end

@@ -26,8 +26,7 @@ ActiveRecord::Schema.define(version: 2020_04_04_132547) do
   create_table "order_items", force: :cascade do |t|
     t.bigint "order_id", null: false
     t.integer "quantity"
-    t.integer "unit_price_cents", default: 0, null: false
-    t.string "unit_price_currency", default: "EUR", null: false
+    t.decimal "unit_price"
     t.string "product_code"
     t.string "product_description"
     t.datetime "created_at", precision: 6, null: false
@@ -41,8 +40,7 @@ ActiveRecord::Schema.define(version: 2020_04_04_132547) do
     t.integer "import_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "total_amount_cents", default: 0, null: false
-    t.string "total_amount_currency", default: "EUR", null: false
+    t.decimal "total_amount"
     t.index ["customer_id"], name: "index_orders_on_customer_id"
     t.index ["import_id"], name: "index_orders_on_import_id"
   end

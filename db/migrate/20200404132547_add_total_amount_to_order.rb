@@ -1,5 +1,5 @@
 class AddTotalAmountToOrder < ActiveRecord::Migration[6.0]
   def change
-    add_monetize :orders, :total_amount
+    add_column :orders, :total_amount, :decimal
   end
 end

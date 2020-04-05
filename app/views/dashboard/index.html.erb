@@ -14,7 +14,7 @@
       <h3>
         <div>Revenue</div>
         <div id="revenue">
-          <%= humanized_money_with_symbol @revenue %>
+          <%= number_to_human @revenue, units: { billion: 'B', million: 'M', thousand: 'K'} %> €
         </div>
       </h3>
     </div>
@@ -24,7 +24,7 @@
       <h3>
         <div>AVG Revenue/Order</div>
         <div id="avg-revenue">
-          <%= humanized_money_with_symbol @avg_rev, precision: 2 %>
+          <%= number_to_human @avg_rev, precision: 2, units: { million: 'M', thousand: 'K'} %> €
         </div>
       </h3>
     </div>
